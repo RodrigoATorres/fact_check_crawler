@@ -1,0 +1,1 @@
+scrapy runspider fact_check_crawler/spiders/boatosorg.py -s HTTPCACHE_ENABLED=1
