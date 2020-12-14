@@ -1,7 +1,20 @@
 version: '3.1'
 
 services:
-  
+  everdade-crawler:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    restart: always  
+
+  scheduler:
+    build: https://github.com/mcuadros/ofelia.git
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./ofelia/config.ini:/etc/ofelia/config.ini
+    depends_on:
+      - everdade-crawler
+
   mongo:
     image: mongo
     restart: always
