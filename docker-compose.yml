@@ -25,7 +25,7 @@ services:
     env_file:
       - .env
     volumes:
-      - /root/fact_check_crawler/data/:/data/db
+      - /root/fact_check_crawler_db/data/:/data/db
 
 
   mongo-express:
