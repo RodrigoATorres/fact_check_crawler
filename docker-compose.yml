@@ -8,6 +8,8 @@ services:
       dockerfile: Dockerfile
     command: tail -f /dev/null
     restart: always  
+    networks:
+      - everdade-net
 
   scheduler:
     build: https://github.com/mcuadros/ofelia.git
@@ -16,6 +18,8 @@ services:
       - ./ofelia/config.ini:/etc/ofelia/config.ini
     depends_on:
       - everdade-crawler
+    networks:
+      - everdade-net
 
   mongo:
     image: mongo
@@ -26,7 +30,8 @@ services:
       - .env
     volumes:
       - /root/fact_check_crawler_db/data/:/data/db
-
+    networks:
+      - everdade-net
 
   mongo-express:
     image: mongo-express
@@ -35,4 +40,9 @@ services:
       - 8081:8081
     env_file:
       - .env
+    networks:
+      - everdade-net
     
+networks:
+  everdade-net:
+    driver: bridge
