@@ -21,6 +21,7 @@ NEWSPIDER_MODULE = 'fact_check_crawler.spiders'
 MONGO_URI = 'mongodb://%s:%s@%s/?authSource=admin' % (os.getenv("MONGO_INITDB_ROOT_USERNAME"), os.getenv("MONGO_INITDB_ROOT_PASSWORD"), os.getenv('MONGO_ADDRESS'))
 MONGO_DATABASE = os.getenv("DB_NAME")
 
+CONCURRENT_ITEMS = 10
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'tc_scraper (+http://www.yourdomain.com)'
 
