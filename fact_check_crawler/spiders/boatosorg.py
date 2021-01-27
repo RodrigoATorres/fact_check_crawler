@@ -61,10 +61,20 @@ class BoatosSpider(scrapy.Spider):
         hoaxes = list(filter(lambda x:x!='Se inscreva no nosso canal no Youtube', hoaxes))
         if len(hoaxes) == 0:
             hoaxes = response.css('.entry-content > p > em *::text').getall()
+
+        title = response.css('.entry-title::text').get().strip()
+        datetime = response.css('.entry-date::attr(datetime)').get()
+
+        if response.css('.entry-content > p:nth-child(2) > strong:nth-child(1)::text').get() != None:
+            summary = response.css('.entry-content > p:nth-child(2) > strong:nth-child(1)::text').get().strip()
+        else:
+            summary = title
+
+
         yield Article(
-            title = response.css('.entry-title::text').get().strip(),
-            datetime = response.css('.entry-date::attr(datetime)').get(),
-            summary = response.css('.entry-content > p:nth-child(2) > strong:nth-child(1)::text').get().strip(),
+            title = title,
+            datetime = datetime,
+            summary = summary,
             hoax = ''.join(hoaxes),
             url = response.url
         )
