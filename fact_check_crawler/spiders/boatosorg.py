@@ -1,6 +1,9 @@
+import os
 import scrapy
 from fact_check_crawler.items import Article
 from fact_check_crawler.mongo_provider import MongoProvider
+import socket
+import urllib.request
 
 class BoatosSpider(scrapy.Spider):
     name = "boatos.org"
@@ -26,7 +29,7 @@ class BoatosSpider(scrapy.Spider):
                 response.urljoin(link),
                 callback = self.parse_category
             )
-        
+
     def parse_category(self, response):
         links = response.css(".more-link::attr(href)").getall()
         for link in links:
@@ -48,6 +51,12 @@ class BoatosSpider(scrapy.Spider):
             )
 
     def parse_article(self, response):
+        try:
+            urllib.request.urlopen(os.environ.get('HEALTH_CHECK_URL_ARTICLE'), timeout=10)
+        except socket.error as e:
+            # Log ping failure here...
+            print("Ping failed: %s" % e)
+
         hoaxes = response.css('span[style="color: #ff0000;"] *::text').getall()
         hoaxes = list(filter(lambda x:x!='Se inscreva no nosso canal no Youtube', hoaxes))
         if len(hoaxes) == 0:
